@@ -1,0 +1,23 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+require_relative './custom_pods'
+
+platform :ios, '11.0'
+
+target 'uber_eats' do
+  config = use_native_modules!
+  use_frameworks!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
+
+  post_install do |installer|
+    #flipper_post_install(installer)
+    custom_post_install(installer)
+    react_native_post_install(installer)
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+  end
+end
